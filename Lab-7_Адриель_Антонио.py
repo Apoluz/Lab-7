@@ -1,25 +1,25 @@
 import requests
-from requests.auth import HTTPBasicAuth
 
-# Credenciales
-USERNAME = "itmouniversity_arrietaalvarado_adryelantonio"
-PASSWORD = "Z8Hw1gL8Fq"
+ISS_NOW_URL = "http://api.open-notify.org/iss-now.json"
 
-# URL con la fecha y coordenadas de San Petersburgo
-URL = "https://api.meteomatics.com/2025-02-16T12:00:00Z/t_2m:C/59.9343,30.3351/json"
+# Координаты Санкт-Петербурга
+широта = 59.9343
+долгота = 30.3351
 
-# Hacer la solicitud con autenticación
-response = requests.get(URL, auth=HTTPBasicAuth(USERNAME, PASSWORD))
 
-# Verificar respuesta
-if response.status_code == 200:
-    data = response.json()
-    
-    # Ajuste correcto para acceder a la temperatura
-    temp_value = data["data"][0]["coordinates"][0]["dates"][0]["value"]
-    
-    print(f"🌍 Город: San Petersburgo")
-    print(f"🌡️ Температура: {temp_value}°C")
+ответ_исс_сейчас = requests.get(ISS_NOW_URL)
+
+if ответ_исс_сейчас.status_code == 200:
+    данные_исс = ответ_исс_сейчас.json()
+    исс_широта = данные_исс["iss_position"]["latitude"]
+    исс_долгота = данные_исс["iss_position"]["longitude"]
+
+    print(f"🚀 МКС в настоящее время находится в:")
+    print(f"   🌍 Широта: {исс_широта}, Долгота: {исс_долгота}\n")
 else:
-    print("❌ Error:", response.status_code, response.text)
+    print("❌ Ошибка при получении текущего местоположения МКС:", ответ_исс_сейчас.status_code)
+
+
+
+
 
